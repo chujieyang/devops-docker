@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  app:
+    build: ./app
+    ports:
+      - "6666:6666"
+    links:
+      - db-init
+    networks:
+      - docker-app-test
+  db-init:
+    build: ./database
+    links:
+      - mysql
+    networks:
+      - docker-app-test
+  mysql:
+    container_name: code-mysql
+    image: mysql:8
+    ports:
+      - 3306:3306
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_PASSWORD=123456
+      - MYSQL_USER=appdev
+      - MYSQL_DATABASE=demo
+    networks:
+      - docker-app-test
+networks:
+  docker-app-test:
+    driver: bridge

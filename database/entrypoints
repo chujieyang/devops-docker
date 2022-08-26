@@ -1,0 +1,16 @@
+#!/bin/sh
+
+echo "begin to init database 「demo」"
+
+i=0
+while [ "$i" -le 20 ]; do
+    mysql -hmysql -P3306 -uappdev -p123456 -e "select 1"
+    if [ $? -ne 0 ]; then
+        echo "wait database ready..."
+        sleep 5
+    else
+        mysql -hmysql -P3306 -uappdev -p123456 < ./demo.sql
+        echo "init success"
+        break
+    fi
+done
